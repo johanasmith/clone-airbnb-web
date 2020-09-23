@@ -2,53 +2,69 @@ import React, { useState, useEffect } from 'react'
 import { FramePage } from './../FramePage'
 import { Boton } from './../../components/Boton'
 import { useParams } from 'react-router-dom'
+import {requestHttp} from '../../config/HttpRequest'
 
 export const BookingPage = () => {
     const { id } = useParams()
-    const [name, setName] = useState('')
-    const [phone, setPhone] = useState('')
-    const [email, setEmail] = useState('')
-    const [bookingDate, setBookingDate] = useState('')
+    const [nombres, setName] = useState('')
+    const [celularContacto, setPhone] = useState('')
+    const [correoContacto, setEmail] = useState('')
+    const [fechareserva, setBookingDate] = useState('')
     const [isValidForm, setIsValidForm] = useState(false)  
+
 
     const bookingHandler = (e) =>{
         e.preventDefault()
         requestBooking()
     }
 
-    const requestBooking = () => {
+    useEffect(() => {
+        setIsValidForm(nombres !=='' && celularContacto !=='' && correoContacto !== '' && fechareserva !== '')
+    },[nombres,celularContacto,correoContacto,fechareserva])
+
+    const requestBooking = async () => {
         const body = {
-            id,
-            name,   //name : name
-            phone,
-            email,
-            bookingDate
+            idLugar : id,
+            nombres,
+            celularContacto,
+            correoContacto,
+            fechareserva
         }
-        console.log('body', body)
+        try {           
+            const response = await requestHttp('post', '/booking/save',body)
+            setIsValidForm(false)
+            clean()
+            alert(response)
+        } catch (error) {
+            console.error(error)
+        }
     }
 
-    useEffect(() => {
-        setIsValidForm(name !=='' && phone !=='' && email !== '' && bookingDate !== '')
-    },[name,phone,email,bookingDate])
+    const clean = () =>{
+        setName('')
+        setPhone('')
+        setEmail('')
+        setBookingDate('')
+    }
 
     return (
         <FramePage>
             <form onSubmit={bookingHandler} className="booking-form">
                 <div>
                     <label>Nombre:</label>
-                    <input value={name} onChange={e=>setName(e.target.value)} type="text"/>
+                    <input value={nombres} onChange={e=>setName(e.target.value)} type="text"/>
                 </div>
                 <div>
                     <label>Teléfono:</label>
-                    <input value={phone} onChange={e=>setPhone(e.target.value)} type="tel" />
+                    <input value={celularContacto} onChange={e=>setPhone(e.target.value)} type="tel" />
                 </div>
                 <div>
                     <label>Correo:</label>
-                    <input value={email} onChange={e=>setEmail(e.target.value)} type="email" />
+                    <input value={correoContacto} onChange={e=>setEmail(e.target.value)} type="email" />
                 </div>
                 <div>
                     <label>Fecha de reserva:</label>
-                    <input value={bookingDate} onChange={e=>setBookingDate(e.target.value)} type="date" />
+                    <input value={fechareserva} onChange={e=>setBookingDate(e.target.value)} type="date" />
                 </div>
                 <Boton disabled={!isValidForm} type="submit" label="Reserva ahora" />
             </form>

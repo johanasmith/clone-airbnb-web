@@ -12,7 +12,7 @@ export const Alternatives = () => {
     const getAllExperiences = async () => {
         try {
             const response = await requestHttp('get', '/experiences')
-            setAlternatives(response.experience)
+            setAlternatives(response.experiences)
         } catch (error) {
             console.error(error)
         }
@@ -21,7 +21,7 @@ export const Alternatives = () => {
     return (
         <section className="Alternatives">
             {
-                alternatives.map(el => <Housing  key={el.id}{...el} />)
+                alternatives.map(el => <Housing  key={el._id}{...el} />)
             }
 
         </section>

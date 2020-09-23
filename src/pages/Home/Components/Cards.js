@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 
 export const Cards = (props) => (
     <Link className="link" to={{
-        pathname: `/detail/${props.id}`,
+        pathname: `/detail/${props._id}`,
         state: { imagen: props.imagen, titulo: props.titulo, lugar:props.lugar }
       }}>
         <article style={{backgroundImage: `url(${props.imagen})` }}>

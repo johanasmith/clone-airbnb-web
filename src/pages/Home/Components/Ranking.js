@@ -21,7 +21,7 @@ export const Ranking = () => {
     return (
         <section className="ranking">
             {
-                top5.map(el => <Cards key={el.id} id={el.id} imagen={el.imagen} titulo={el.titulo} lugar={el.lugar} puntaje={el.puntaje} />)
+                top5.map(el => <Cards key={el._id} _id={el._id} imagen={el.imagen} titulo={el.titulo} lugar={el.lugar} puntaje={el.puntaje} />)
             }
         </section>
     )
